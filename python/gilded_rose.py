@@ -7,7 +7,7 @@ class GildedRose(object):
         self.items = items
 
     def isConjured(self, item):
-        return 2 if item.name.find("Conjured") != -1 else 1
+        return 2 if item.name.startswith("Conjured") else 1
 
     def get_item_category(self, item):
         match item.name:
@@ -31,12 +31,6 @@ class GildedRose(object):
             3 if item.sell_in <= 5 else 2 if item.sell_in <= 10 else 1) * is_conjured
         item.sell_in -= 1
 
-    def update_conjured(self, item, is_conjured):
-        if item.sell_in <= 0:
-            item.quality -= 2
-        item.quality -= 2
-        item.sell_in -= 1
-
     def update_quality(self):
         for item in self.items:
             item_category = self.get_item_category(item)
@@ -49,8 +43,6 @@ class GildedRose(object):
                 self.update_standard_item(item, is_conjured, 1)
             elif item_category == "Backstage passes":
                 self.update_backstage_passes(item, is_conjured)
-            elif item_category == "Conjured":
-                self.update_conjured(item, is_conjured)
             item.quality = min(max(item.quality, 0), 50)
 
 
