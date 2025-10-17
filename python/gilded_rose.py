@@ -1,39 +1,56 @@
 # -*- coding: utf-8 -*-
 
 class GildedRose(object):
-
     def __init__(self, items):
         self.items = items
 
+    def get_item_category(self,item):
+        special_object_names = ["Aged Brie", "Sulfuras", "Backstage passes", "Conjured"]
+        for special_name in special_object_names:
+            if item.name.startswith(special_name):
+                return special_name
+        return "normal"
+
+    def update_normal_item(self,item):
+        if item.sell_in<=0:
+            item.quality-=1
+        item.quality-=1
+        item.sell_in-=1
+
+    def update_aged_brie(self,item):
+        item.quality+=1
+        item.sell_in-=1
+
+    def update_backstage_passes(self,item):
+        if item.sell_in <= 0:
+            item.quality=0
+        elif item.sell_in <= 5:
+            item.quality+=3
+        elif item.sell_in <= 10:
+            item.quality+=2
+        else:
+            item.quality+=1
+        item.sell_in-=1
+
+    def update_conjured(self,item):
+        if item.sell_in <= 0:
+            item.quality-=2
+        item.quality-=2
+        item.sell_in-=1
+
     def update_quality(self):
         for item in self.items:
-            if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
-                if item.quality > 0:
-                    if item.name != "Sulfuras, Hand of Ragnaros":
-                        item.quality = item.quality - 1
-            else:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
-                    if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                        if item.sell_in < 11:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-                        if item.sell_in < 6:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-            if item.name != "Sulfuras, Hand of Ragnaros":
-                item.sell_in = item.sell_in - 1
-            if item.sell_in < 0:
-                if item.name != "Aged Brie":
-                    if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                        if item.quality > 0:
-                            if item.name != "Sulfuras, Hand of Ragnaros":
-                                item.quality = item.quality - 1
-                    else:
-                        item.quality = item.quality - item.quality
-                else:
-                    if item.quality < 50:
-                        item.quality = item.quality + 1
+            item_category=self.get_item_category(item)
+            #I will process items based on their names, starting with normal items
+            if item_category == "normal":
+                self.update_normal_item(item)
+            elif item_category == "Aged Brie":
+                self.update_aged_brie(item)
+            elif item_category == "Backstage passes":
+                self.update_backstage_passes(item)
+            elif item_category == "Conjured":
+                self.update_conjured(item)
+            item.quality=min(max(item.quality,0),50)
 
 
 class Item:
