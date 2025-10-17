@@ -51,32 +51,33 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(item.quality, 50)
 
     def test_sulfuras_never_changes(self):
-        item = Item("Sulfuras, Hand of Ragnaros", sell_in=0, quality=30)
+        item = Item("Sulfuras, Hand of Ragnaros", sell_in=0, quality=80)
         gr = GildedRose([item])
         gr.update_quality()
         self.assertEqual(item.sell_in, 0)
-        self.assertEqual(item.quality, 30)
+        self.assertEqual(item.quality, 80)
 
     def test_backstage_pass_increase_quality(self):
-        item = Item("Backstage passes", sell_in=15, quality=20)
+        item = Item("Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20)
         gr = GildedRose([item])
         gr.update_quality()
         self.assertEqual(item.quality, 21)
 
     def test_backstage_pass_10_days_or_less(self):
-        item = Item("Backstage passes", sell_in=10, quality=20)
+        item = Item("Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=20)
         gr = GildedRose([item])
         gr.update_quality()
+        print(item.quality)
         self.assertEqual(item.quality, 22)
 
     def test_backstage_pass_5_days_or_less(self):
-        item = Item("Backstage passes", sell_in=5, quality=20)
+        item = Item("Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=20)
         gr = GildedRose([item])
         gr.update_quality()
         self.assertEqual(item.quality, 23)
 
     def test_backstage_pass_after_concert(self):
-        item = Item("Backstage passes", sell_in=0, quality=20)
+        item = Item("Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=20)
         gr = GildedRose([item])
         gr.update_quality()
         self.assertEqual(item.quality, 0)
