@@ -82,7 +82,7 @@ class GildedRoseTest(unittest.TestCase):
         gilded_rose.update_quality()
         self.assertEqual(item.quality, 0)
 
-    def test_conjured_item_degilded_roseades_twice_as_fast(self):
+    def test_conjured_item_degrade_quality_twice_as_fast(self):
         item = Item("Conjured Mana Cake", sell_in=3, quality=6)
         gilded_rose = GildedRose([item])
         gilded_rose.update_quality()
